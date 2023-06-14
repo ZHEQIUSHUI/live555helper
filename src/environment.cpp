@@ -30,6 +30,11 @@ void Environment::mainloop()
 	this->taskScheduler().doEventLoop(&m_stop);	
 }
 
+void Environment::start()
+{
+	m_stop = 0;	
+}
+
 void Environment::stop()
 {
 	m_stop = 1;	

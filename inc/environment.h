@@ -25,6 +25,7 @@ class Environment : public BasicUsageEnvironment
 	
 	
 		void mainloop();
+		void start();
 		void stop();	
 		
 	protected:
