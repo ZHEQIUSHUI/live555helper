@@ -3,8 +3,7 @@
 #include "rtspconnectionclient.h"
 #include "memory"
 #include "thread"
-
-typedef void (*RtspClientCallback)(const void *buff, int len, void *reserve);
+#include "warpper.h"
 
 class RtspClient
 {
@@ -12,7 +11,7 @@ private:
     class MyCallback : public RTSPConnection::Callback
     {
     public:
-        RtspClientCallback _cb = nullptr;
+        rtsp_client_callback_t _cb = nullptr;
         void *reserve = nullptr;
         virtual bool onData(const char *id, unsigned char *buffer, ssize_t size, struct timeval presentationTime)
         {
@@ -41,7 +40,7 @@ public:
     RtspClient(/* args */) {}
     ~RtspClient() {}
 
-    void Open(std::string _url, RtspClientCallback _cb, void *reserve)
+    void Open(std::string _url, rtsp_client_callback_t _cb, void *reserve)
     {
         Stop();
         env.start();
@@ -60,3 +59,25 @@ public:
         }
     }
 };
+
+rtsp_client_t rtspcli_start(char *_url, rtsp_client_callback_t _cb, void *reserve)
+{
+    RtspClient *cli = new RtspClient;
+    cli->Open(_url, _cb, reserve);
+    return cli;
+}
+
+void rtspcli_stop(rtsp_client_t *rtspcli)
+{
+    if (rtspcli)
+    {
+        RtspClient *cli = (RtspClient *)*rtspcli;
+        if (cli)
+        {
+            cli->Stop();
+            delete cli;
+        }
+        cli = nullptr;
+        *rtspcli = nullptr;
+    }
+}

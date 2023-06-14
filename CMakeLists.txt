@@ -37,7 +37,7 @@ if (NOT OpenSSL_FOUND)
 endif()
 
 add_executable (${PROJECT_NAME} main.cpp)
-target_link_libraries (${PROJECT_NAME} liblive555helper) 
+target_link_libraries (${PROJECT_NAME} liblive555helper pthread) 
 if (OpenSSL_FOUND)
     target_link_libraries (${PROJECT_NAME} OpenSSL::SSL OpenSSL::Crypto)
 endif()

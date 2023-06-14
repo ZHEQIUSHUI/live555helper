@@ -1,4 +1,5 @@
-#include "warpper.hpp"
+#include "warpper.h"
+#include "iostream"
 
 void fcb(const void *buff, int len, void *reserve)
 {
@@ -7,9 +8,8 @@ void fcb(const void *buff, int len, void *reserve)
 
 int main(int argc, char *argv[])
 {
-	RtspClient cli;
-	cli.Open("rtsp://10.126.33.13:8554/axstream0", fcb, nullptr);
+	auto cli = rtspcli_start("rtsp://10.126.33.13:8554/axstream0", fcb, nullptr);
 	getchar();
-	cli.Stop();
+	rtspcli_stop(&cli);
 	return 0;
 }
